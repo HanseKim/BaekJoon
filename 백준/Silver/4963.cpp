@@ -52,7 +52,7 @@ int main(){
                 visited[i][j] = 0;
             }
         }
-        cout<<counting();
+        cout<<counting()<<"\n";
         cin>>m>>n;
     }
 }
