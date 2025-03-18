@@ -2,23 +2,42 @@
 #include <vector>
 using namespace std;
 
-int main(){
-    ios::sync_with_stdio(false);
-    cin.tie(nullptr);
+int main() {
+    int N, k;
+    cin >> N >> k;
 
-    int N;
-    cin >> N;
-    vector<bool> seen(N + 1, false);
-    
-    int card;
-    // 남은 카드들이 몇 장인지 모르지만, 모두 입력받습니다.
-    while(cin >> card){
-        seen[card] = true;
+    vector<int> arr(N);
+    for (int i = 0; i < N; i++) {
+        cin >> arr[i];
     }
-    
-    for (int i = 1; i <= N; i++){
-        if (!seen[i])
-            cout << i << "\n";
+
+    int comparisons = 0;
+
+    for (int i = 1; i < N; i++) {
+        int key = arr[i];
+        int j = i - 1;
+
+        if (i == k - 1) {
+            while (j >= 0) {
+                comparisons++;
+                if (arr[j] > key) {
+                    arr[j + 1] = arr[j];
+                    j--;
+                } else {
+                    break;
+                }
+            }
+            arr[j + 1] = key;
+            break;
+        } else {
+            while (j >= 0 && arr[j] > key) {
+                arr[j + 1] = arr[j];
+                j--;
+            }
+            arr[j + 1] = key;
+        }
     }
+
+    cout << comparisons << "\n";
     return 0;
 }
