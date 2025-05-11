@@ -1,39 +1,34 @@
 import sys
-sys.setrecursionlimit(10000)
 input = sys.stdin.readline
 
-def dfs(start, graph, visited, dist, acc_time):
-    visited[start] = True
-    dist[start] = acc_time
-    for neighbor, weight in graph[start]:
-        if not visited[neighbor]:
-            dfs(neighbor, graph, visited, dist, acc_time + weight)
+INF = int(1e9)
 
-n, c1, c2 = map(int, input().split())
-graph = [[] for _ in range(n + 1)]
+n = int(input().strip())
 
-for _ in range(n - 1):
-    a, b, l = map(int, input().split())
-    graph[a].append((b, l))
-    graph[b].append((a, l))
+P = [[0] * n for _ in range(n)]  # 중간 노드 기록
 
-dist_c1 = [0] * (n + 1)
-dist_c2 = [0] * (n + 1)
+def floyd(n, D, start, last):
+    for k in range(n):
+        for i in range(n):
+            for j in range(n):
+                if D[i][k] + D[k][j] < D[i][j]:
+                    P[i][j] = k
+                    D[i][j] = D[i][k] + D[k][j]
+    return D[start][last]
 
-visited = [False] * (n + 1)
-dfs(c1, graph, visited, dist_c1, 0)
+def way(start, last):
+    middle = P[start][last]
+    if middle == 0:
+        return []
+    return way(start, middle) + [middle] + way(middle, last)
 
-visited = [False] * (n + 1)
-dfs(c2, graph, visited, dist_c2, 0)
+# 입력 및 그래프 구성
+W = [[INF if x == -1 else x for x in map(int, input().split())] for _ in range(n)]
 
-result = []
-for i in range(1, n + 1):
-    if i == c1 or i == c2:
-        continue
-    min_time = min(dist_c1[i], dist_c2[i])
-    result.append((min_time, i))
+# 깊은 복사
+D = [row[:] for row in W]
 
-result.sort()
+start, last = map(int, input().split())
 
-for _, node in result:
-    print(node)
+print(f"Shortest cost from {start} to {last}: {floyd(n, D, start, last)}")
+print(f"Path from {start} to {last}: {[start, *way(start, last), last]}")

@@ -54,5 +54,11 @@
         "vector": "cpp",
         "algorithm": "cpp",
         "set": "cpp"
-    }
+    },
+    "code-runner.executorMap": {
+        "c": "gcc -std=c11 -o temp.out $fileName && ./temp.out",
+        "cpp": "g++ -std=c++17 -o temp.out $fileName && ./temp.out"
+    },
+    "code-runner.runInTerminal": true,
+    "code-runner.saveFileBeforeRun": true
 }
