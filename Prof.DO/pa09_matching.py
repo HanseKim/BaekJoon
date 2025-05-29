@@ -94,29 +94,16 @@ rk = RK(txt, pattern, len(txt), len(pattern))
 kmp = KMP(txt, pattern, len(txt), len(pattern))
 bm = BM(txt, pattern, len(txt), len(pattern))
 
-if rk == kmp and kmp == bm:
-    print('0 0 0')
-elif rk == kmp and rk < bm:
-    print("0 0 BM")
-elif rk == kmp and rk > bm:
-    print("BM 0 0")
-elif rk == bm and rk < kmp:
-    print("0 0 KMP")
-elif rk == bm and rk > kmp:
-    print("KMP 0 0")
-elif kmp == bm and rk < kmp:
-    print("RK 0 0")
-elif kmp == bm and rk > kmp:
-    print("0 0 RK")
-elif rk < kmp and kmp < bm:
-    print("RK KMP BM")
-elif rk < bm < kmp:
-    print("RK BM KMP")
-elif kmp < rk < bm:
-    print("KMP RK BM")
-elif kmp < bm < rk:
-    print("KMP BM RK")
-elif bm < rk < kmp:
-    print("BM RK KMP")
-else :
-    print("BM KMP RK")
+algos = [('RK', rk), ('KMP', kmp), ('BM', bm)]
+order = sorted(range(3), key=lambda i: (algos[i][1], i))
+from collections import Counter
+cnts = Counter([c for _, c in algos])
+tokens = []
+for idx in order:
+    name, cnt = algos[idx]
+    if cnts[cnt] > 1:
+        tokens.append('0')
+    else:
+        tokens.append(name)
+
+print(' '.join(tokens))
